@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+if [[ $# -eq 1 ]]; then
+	selected=$1
+else
+	selected=$(find ~/.config/ ~/projects/counterpart/ ~/projects/work/noble/ ~/projects/work/ ~/projects/work/counterpart/ ~/projects/3thparty/ ~/projects/personal/ -mindepth 1 -maxdepth 1 -type d | fzf)
+fi
+
+if [[ -z $selected ]]; then
+	exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+layout=$(find ~/.tmuxifier/layouts/ -iname "$selected_name.session.sh")
+window=$(find ~/.tmuxifier/layouts/ -iname "$selected_name.window.sh")
+tmux_turbo="tmux -u -2"
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+	echo "first new session outside tmux"
+	if [[ -z $layout ]]; then
+		$tmux_turbo new-session -s $selected_name -c $selected
+	else
+		tmuxifier load-session $selected_name
+	fi
+	$tmux_turbo kill-session -t 0 2>/dev/null
+	exit 0
+fi
+
+if tmux has-session -t=$selected_name 2>/dev/null; then
+	echo "second attach to existing session outside/inside tmux"
+	if [[ -z $TMUX ]]; then
+		$tmux_turbo attach-session -t=$selected_name -c=$selected
+	else
+		$tmux_turbo switch-client -t $selected_name
+	fi
+fi
+
+if ! tmux has-session -t=$selected_name 2>/dev/null; then
+	echo "third create new session outside/inside tmux"
+
+	if [[ -z $TMUX ]]; then
+		if [[ ! -z $window ]]; then
+			tmuxifier load-session $selected_name
+		else
+			$tmux_turbo new-session -s $selected_name -c $selected -d
+			$tmux_turbo attach-session -t=$selected_name -c=$selected
+		fi
+	else
+		$tmux_turbo new-session -s $selected_name -c $selected -d
+		if [[ ! -z $window ]]; then
+			tmux new-window -n temp -t $selected_name
+			tmux send-keys -t $selected_name:temp "tmuxifier load-window $selected_name" Enter
+			tmux kill-window -t$selected_name:zsh
+			sleep 1
+			tmux kill-window -t$selected_name:temp
+		fi
+		$tmux_turbo switch-client -t $selected_name
+	fi
+fi

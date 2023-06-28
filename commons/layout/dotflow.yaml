@@ -1,0 +1,10 @@
+session_name: dotflow
+windows:
+- focus: 'true'
+  layout: f369,253x44,0,0{126x44,0,0,8,126x44,127,0,9}
+  options: {}
+  panes:
+  - nvim
+  - pane
+  start_directory: /home/artur/.config/dotflow
+  window_name: zsh
