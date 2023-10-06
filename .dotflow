@@ -3,3 +3,7 @@ $HOME/.zshrc:$HOME/.config/dotflow/.zshrc
 $HOME/.p10k.zsh:$HOME/.config/dotflow/.p10k.zsh
 $HOME/.tmux.conf:$HOME/.config/dotflow/.tmux.conf
 $HOME/.config/commons:$HOME/.config/dotflow/commons
+$HOME/.config/alacritty:$HOME/.config/dotflow/alacritty
+$HOME/.config/nvim:$HOME/.config/dotflow/nvim
+$HOME/.tmux:$HOME/.config/dotflow/.tmux
+$HOME/.config/polybar:$HOME/.config/dotflow/polybar

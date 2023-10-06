@@ -1,0 +1,31 @@
+# Colors (Miasma)
+colors:
+  # Default colors
+  primary:
+    background: "#161616"
+    foreground: "#fafafa"
+
+  # Normal colors
+  normal:
+    black: "#161616"
+    red: "#ee5396"
+    green: "#08bdba"
+    yellow: "#ffab91"
+    blue: "#78a9ff"
+    magenta: "#673ab7"
+    cyan: "#be95ff"
+    white: "#fafafa"
+
+  # Bright colors
+  bright:
+    black: "#161616"
+    red: "#ee5396"
+    green: "#08bdba"
+    yellow: "#ffab91"
+    blue: "#78a9ff"
+    magenta: "#673ab7"
+    cyan: "#be95ff"
+    white: "#fafafa"
+
+  indexed_colors:
+    - { index: 16, color: "0x000000" }

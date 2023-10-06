@@ -1,0 +1,55 @@
+window.opacity: 1.0
+
+window:
+  dimensions:
+    columns: 100
+    lines: 30
+
+  padding:
+    x: 5
+    y: 0
+
+  # set decorations to 'Full' if you want the Title Bars and Borders
+  decorations: none
+font:
+  normal:
+    family: JetBrainsMonoNerdFont
+    style: Regular
+
+  bold:
+    family: JetBrainsMonoNerdFont
+    style: Bold
+
+  italic:
+    family: JetBrainsMonoNerdFont
+    style: Italic
+
+  size: 12
+  offset:
+    x: 0
+  # use_thin_strokes: false
+draw_bold_text_with_bright_colors: true
+live_config_reload: true
+
+import:
+  - ~/.config/alacritty/oxocarbon.yml
+
+cursor:
+  style:
+    # Cursor Shape: Underline, Block, Beam
+    shape: Block
+
+    # Blinking Values: On, Off, Never, Always
+    blinking: On
+env:
+  TERM: xterm-256color
+
+key_bindings:
+  - { key: Paste, action: Paste }
+  - { key: Copy, action: Copy }
+  - { key: L, mods: Control, action: ClearLogNotice }
+  - { key: L, mods: Control, mode: ~Vi|~Search, chars: "\x0c" }
+  - { key: PageUp, mods: Shift, mode: ~Alt, action: ScrollPageUp }
+  - { key: PageDown, mods: Shift, mode: ~Alt, action: ScrollPageDown }
+  - { key: Home, mods: Shift, mode: ~Alt, action: ScrollToTop }
+  - { key: End, mods: Shift, mode: ~Alt, action: ScrollToBottom }
