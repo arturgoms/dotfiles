@@ -1,16 +1,9 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
+eval $(opam env)
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -104,15 +97,84 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+alias zshconfig="mate ~/.zshrc"
+alias ohmyzsh="mate ~/.oh-my-zsh"
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+# End of lines configured by zsh-newuser-install
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source "$HOME/.cargo/env" 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="/Users/arturgomes/.local/bin:$PATH"
-export PATH=$PATH:~/go/bin/
+alias vim=nvim
+alias v=nvim
+export PATH=$PATH:/home/artur/.local/bin:/home/artur/go/bin
+source /usr/share/nvm/init-nvm.sh
+alias get_idf='. $HOME/esp/esp-idf/export.sh'
+alias tmux="TERM=screen-256color-bce tmux -u -2"
+#alias emacs="emacsclient -n -c -a emacs"
+alias tnt="~/.config/commons/tmux-sessionizer-turbo"
+
+#. $HOME/.asdf/asdf.sh
+#. $HOME/.asdf/completions/asdf.bash
+#toAdd="$ASDF_DIR/shims:$ASDF_DIR/bin"
+#toRemove="$toAdd:"
+
+export PATH=${PATH#$toRemove}:$toAdd
+export PATH=~/.local/bin:$HOME/.config/emacs/bin:$PATH
+export PATH="$HOME/.tmuxifier/bin:$PATH"
+export EDITOR=nvim
+export BROWSER="/usr/bin/vivaldi-stable"
+export DISABLE_AUTO_TITLE='true'
+eval "$(tmuxifier init -)"
+
+plugins=(
+  git
+  bundler
+  dotenv
+  osx
+  rake
+  rbenv
+  ruby
+  npm # you added this
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+source /home/artur/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /home/artur/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8b7c6b,bg=#0A0E14,bold"
+
+# Nvim switche
+alias nvim-lazy="NVIM_APPNAME=LazyVim nvim"
+alias nvim-chad="NVIM_APPNAME=NvChad nvim"
+alias nvim-astro="NVIM_APPNAME=AstroNvim nvim"
+alias nvim-test="NVIM_APPNAME=nvim-test nvim"
+alias nvim-miasma="NVIM_APPNAME=nvim-miasma nvim"
+alias nvim-og="NVIM_APPNAME=nvim-og nvim"
+alias nvim-nyoom="NVIM_APPNAME=nyoom nvim"
+
+function nvims() {
+  items=("default" "LazyVim" "NvChad" "AstroNvim" "nvim-test" "nvim-og" "nvim-miasma" "nyoom")
+  config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=~50% --layout=reverse --border --exit-0)
+  if [[ -z $config ]]; then
+    echo "Nothing selected"
+    return 0
+  elif [[ $config == "default" ]]; then
+    config=""
+  fi
+  NVIM_APPNAME=$config nvim $@
+}
+
+bindkey -s ^a "nvims\n"
+
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
